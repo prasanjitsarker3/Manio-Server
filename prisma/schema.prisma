@@ -1,0 +1,139 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init2
+
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+
+model User {
+  id String @id @default(uuid())
+  name String
+  email String @unique
+  password String
+  role UserRole @default(user)
+  needPasswordChange Boolean @default(true)
+  status UserStatus @default(ACTIVE)
+  createdAt DateTime @default(now())
+  updateAt DateTime @updatedAt
+  @@map("users")
+}
+
+model Banner {
+  id String @id @default(uuid())
+  name String ?
+  img String
+  createdAt DateTime @default(now())
+  updateAt DateTime @updatedAt
+  @@map("banners")
+}
+model Category {
+  id String @id @default(uuid())
+  name String @unique
+  img String
+  isDeleted Boolean @default(false)
+  products  Product[] 
+ 
+  createdAt DateTime @default(now())
+  updateAt DateTime @updatedAt
+  @@map("categories")
+}
+
+model Product {
+  id String @id @default(uuid())
+  name String
+  price        Float 
+  discount     Float       @default(0)  
+  totalProduct Int         @default(0)
+  size         String[]
+  type         Gender      @default(Man)
+  photo        Photo[]
+  sold         Int @default(0)
+  categoryId   String
+  isDelete     Boolean @default(false)
+  category     Category    @relation(fields: [categoryId], references: [id])
+
+  orderItems  OrderProduct[] 
+  createdAt    DateTime    @default(now())
+  updateAt     DateTime    @updatedAt
+  
+  @@map("products")
+
+}
+
+model Photo {
+  id        String   @id @default(uuid())
+  img       String
+  isDeleted Boolean  @default(false)
+  productId String  
+  product   Product  @relation(fields: [productId], references: [id])
+
+  @@map("photos")
+}
+
+model Order {
+  id             String         @id @default(uuid())
+  name           String
+  address        String
+  contact        String
+  note           String?
+  deliveryCharge Float?        
+  totalPrice     Float
+  isDeleted      Boolean        @default(false)
+  isPdf          Boolean        @default(false)
+  status         OrderStatus    @default(PENDING)
+  createdAt      DateTime       @default(now())
+  updateAt       DateTime       @updatedAt
+  orderItems     OrderProduct[] 
+
+  @@map("orders")
+}
+
+model OrderProduct {
+  id        String   @id @default(uuid())
+  quantity  Int
+  size      String[] @default([])
+  orderId   String
+  productId String
+  order     Order    @relation(fields: [orderId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id])
+  isDeleted Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updateAt  DateTime @updatedAt
+  @@unique([orderId, productId]) 
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIFM
+  DELIVERY
+  REJECTED
+  RETURN
+}
+
+
+enum UserStatus {
+  ACTIVE
+  BLOCKED
+  DELETED
+}
+enum UserRole {
+  admin
+  user
+} 
+
+enum Gender {
+  Man
+  Woman
+}
+
