@@ -1,7 +1,6 @@
 import { Server } from "http";
 import app from "./app";
 import config from "./App/config";
-import { seedSuperAdmin } from "./Helpers/seed";
 
 let server: Server;
 async function main() {
@@ -9,7 +8,6 @@ async function main() {
     server = app.listen(config.PORT, () => {
       console.log("Server is running on port", config.PORT);
     });
-    // seedSuperAdmin();
   } catch (err) {
     console.log(err);
   }

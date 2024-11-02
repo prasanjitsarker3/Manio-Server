@@ -14,7 +14,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const app_1 = __importDefault(require("./app"));
 const config_1 = __importDefault(require("./App/config"));
-const seed_1 = require("./Helpers/seed");
 let server;
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
@@ -22,7 +21,6 @@ function main() {
             server = app_1.default.listen(config_1.default.PORT, () => {
                 console.log("Server is running on port", config_1.default.PORT);
             });
-            (0, seed_1.seedSuperAdmin)();
         }
         catch (err) {
             console.log(err);

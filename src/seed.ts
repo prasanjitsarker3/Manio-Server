@@ -1,6 +1,6 @@
 import { UserRole } from "@prisma/client";
 import * as bcrypt from "bcrypt";
-import prisma from "../App/Common/Prisma";
+import prisma from "./App/Common/Prisma";
 
 export const seedSuperAdmin = async () => {
   try {
@@ -34,3 +34,5 @@ export const seedSuperAdmin = async () => {
     await prisma.$disconnect();
   }
 };
+
+seedSuperAdmin();

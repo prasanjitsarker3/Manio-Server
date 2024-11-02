@@ -73,7 +73,7 @@ const adminDashboardMetaData = () => __awaiter(void 0, void 0, void 0, function*
         const totalOrderCount = orders.length; // Total orders for the day
         const totalAmount = orders.reduce((acc, order) => acc + order.totalPrice, 0); // Sum of total prices
         lastSevenDaysData.push({
-            date: (0, date_fns_1.format)(date, "dd-MM-yyyy"), // Format date as "25-10-2024"
+            date: (0, date_fns_1.format)(date, "dd-MM-yyyy"),
             totalOrder: totalOrderCount,
             totalAmount: totalAmount,
         });
