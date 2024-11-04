@@ -39,18 +39,22 @@ exports.seedSuperAdmin = void 0;
 const client_1 = require("@prisma/client");
 const bcrypt = __importStar(require("bcrypt"));
 const Prisma_1 = __importDefault(require("./App/Common/Prisma"));
+const config_1 = __importDefault(require("./App/config"));
 const seedSuperAdmin = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        if (!config_1.default.superAdmin || !config_1.default.superAdminPassword) {
+            throw new Error("Super Admin email or password is not defined in the environment variables.");
+        }
         const existingSuperAdmin = yield Prisma_1.default.user.findFirst({
             where: {
-                email: "redoy524@gmail.com",
+                email: config_1.default.superAdmin,
             },
         });
         if (existingSuperAdmin) {
             console.log("Super Admin already exists!");
         }
         else {
-            const hashedPassword = yield bcrypt.hash("redoy524", 12);
+            const hashedPassword = yield bcrypt.hash(config_1.default.superAdminPassword, 12);
             const newSuperAdmin = yield Prisma_1.default.user.create({
                 data: {
                     email: "redoy524@gmail.com",
@@ -72,4 +76,4 @@ const seedSuperAdmin = () => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.seedSuperAdmin = seedSuperAdmin;
-(0, exports.seedSuperAdmin)();
+// seedSuperAdmin();

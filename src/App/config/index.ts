@@ -10,9 +10,6 @@ export default {
   accessTokenExpireDate: process.env.accessTokenExpireDate,
   refreshToken: process.env.refreshToken,
   refreshTokenExpireDate: process.env.refreshTokenExpireDate,
-  // cloud: {
-  //   CLOUDENAME: process.env.CLOUDENAME,
-  //   API_KEY: process.env.API_KEY,
-  //   API_SECRET: process.env.API_SECRET,
-  // },
+  superAdmin: process.env.superAdmin,
+  superAdminPassword: process.env.superAdminPassword,
 };
