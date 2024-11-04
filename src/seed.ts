@@ -41,4 +41,4 @@ export const seedSuperAdmin = async () => {
   }
 };
 
-// seedSuperAdmin();
+seedSuperAdmin();

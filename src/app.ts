@@ -1,18 +1,15 @@
 import express, { Application, Request, Response } from "express";
-import cors from "cors";
 import router from "./Routes/routes";
 import globalErrorHandler from "./Middleware/globalErrorHandler";
 import notFound from "./Middleware/notFound";
 import cookieParser from "cookie-parser";
+import { cors } from "./Lib/cors";
 
 const app: Application = express();
 
-app.use(
-  cors({
-    origin: ["http://localhost:3000", "http://192.168.0.106:3000"],
-    credentials: true,
-  })
-);
+// Apply custom CORS middleware globally
+app.use(cors);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());

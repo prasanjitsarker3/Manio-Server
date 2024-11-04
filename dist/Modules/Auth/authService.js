@@ -22,6 +22,7 @@ const createToken_1 = require("../../App/Common/createToken");
 const config_1 = __importDefault(require("../../App/config"));
 const veriflyToken_1 = require("../../Utilities/veriflyToken");
 const userRegisterIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log(payload);
     const hashPassword = yield bcrypt_1.default.hash(payload.password, 12);
     const userData = {
         name: payload.name,

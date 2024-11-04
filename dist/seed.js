@@ -76,4 +76,4 @@ const seedSuperAdmin = () => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.seedSuperAdmin = seedSuperAdmin;
-// seedSuperAdmin();
+(0, exports.seedSuperAdmin)();

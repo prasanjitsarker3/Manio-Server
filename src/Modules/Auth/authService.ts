@@ -12,6 +12,7 @@ import { verifyToken } from "../../Utilities/veriflyToken";
 import { ITokenUser } from "../../App/Common/authType";
 
 const userRegisterIntoDB = async (payload: any) => {
+  console.log(payload);
   const hashPassword: string = await bcrypt.hash(payload.password, 12);
   const userData = {
     name: payload.name,
