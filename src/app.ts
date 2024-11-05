@@ -3,12 +3,18 @@ import router from "./Routes/routes";
 import globalErrorHandler from "./Middleware/globalErrorHandler";
 import notFound from "./Middleware/notFound";
 import cookieParser from "cookie-parser";
-import { cors } from "./Lib/cors";
+import cors from "cors";
+import path from "path";
 
 const app: Application = express();
-
-// Apply custom CORS middleware globally
-app.use(cors);
+app.use(
+  cors({
+    origin: ["https://maniobd.com", "https://control.maniobd.com"],
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  })
+);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -23,5 +29,6 @@ app.get("/", (req: Request, res: Response) => {
 app.use("/api/v1", router);
 app.use(globalErrorHandler);
 app.use(notFound);
+app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 
 export default app;

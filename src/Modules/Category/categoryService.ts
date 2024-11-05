@@ -16,7 +16,7 @@ const createdCategory = async (req: Request) => {
 
   const category = JSON.parse(req.body.data);
   const categoryData = {
-    name: category,
+    name: category.name,
     img,
   };
   const result = await prisma.category.create({
