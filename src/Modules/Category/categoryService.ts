@@ -11,16 +11,15 @@ const createdCategory = async (req: Request) => {
   let img;
   if (files) {
     const CloudImage = await fileUploader.uploadToCloudinary(files);
-    img = CloudImage?.secure_url;
+    img = CloudImage?.secure_url as string;
   }
 
   const category = JSON.parse(req.body.data);
   const categoryData = {
-    name: category.name,
-    img,
+    name: category?.name || category,
+    img: img as string,
   };
   const result = await prisma.category.create({
-    //@ts-ignore
     data: categoryData,
   });
   return result;

@@ -15,7 +15,7 @@ const createBanner = async (req: Request) => {
   }
   const banner = JSON.parse(req.body.data);
   const bannerData = {
-    name: banner?.name,
+    name: banner?.name || banner,
     img,
   };
   const result = await prisma.banner.create({
@@ -24,7 +24,6 @@ const createBanner = async (req: Request) => {
   });
   return result;
 };
-
 const getAllBanner = async (params: any, options: IPaginationOptions) => {
   const { page, limit, skip, sortBy, sortOrder } =
     paginationCalculation(options);

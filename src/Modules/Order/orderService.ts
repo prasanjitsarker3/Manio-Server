@@ -19,7 +19,6 @@ const createNewOrderInToDB = async (payload: any) => {
       totalPrice: payload.totalPrice,
       orderItems: {
         create: payload.productOrderData.map((item: any) => {
-          console.log("Size Data:", item.size);
           return {
             quantity: item.quantity,
             // size: item.size.split(","),

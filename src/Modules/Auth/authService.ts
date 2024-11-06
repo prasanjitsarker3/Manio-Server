@@ -12,7 +12,6 @@ import { verifyToken } from "../../Utilities/veriflyToken";
 import { ITokenUser } from "../../App/Common/authType";
 
 const userRegisterIntoDB = async (payload: any) => {
-  console.log(payload);
   const hashPassword: string = await bcrypt.hash(payload.password, 12);
   const userData = {
     name: payload.name,
@@ -56,7 +55,6 @@ const userLoginFromDB = async (payload: ILogin) => {
     role: user.role,
   };
 
-  console.log(config.accessToken);
   const accessToken = createToken(
     jwtPayload,
     config.accessToken as string,
@@ -109,7 +107,6 @@ const refreshToken = async (token: string) => {
 };
 
 const changePassword = async (user: ITokenUser, payload: IChangePassword) => {
-  console.log({ user, payload });
   const userData = await prisma.user.findUniqueOrThrow({
     where: {
       email: user.email,
