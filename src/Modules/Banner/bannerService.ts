@@ -18,6 +18,7 @@ const createBanner = async (req: Request) => {
     name: banner?.name || banner,
     img,
   };
+  console.log(bannerData);
   const result = await prisma.banner.create({
     //@ts-ignore
     data: bannerData,

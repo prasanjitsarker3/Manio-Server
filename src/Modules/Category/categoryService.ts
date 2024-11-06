@@ -15,12 +15,11 @@ const createdCategory = async (req: Request) => {
   }
 
   const category = JSON.parse(req.body.data);
-  const categoryData = {
-    name: category?.name || category,
-    img: img as string,
-  };
   const result = await prisma.category.create({
-    data: categoryData,
+    data: {
+      name: category?.name || category,
+      img: img as string,
+    },
   });
   return result;
 };
