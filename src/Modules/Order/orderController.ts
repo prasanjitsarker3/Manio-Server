@@ -109,6 +109,16 @@ const getAllOrdersForAdmin = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+const getAllReturnOrder = catchAsync(async (req: Request, res: Response) => {
+  const optionsData = pick(req.query, optionsPaginationFields);
+  const result = await orderService.getAllReturnOrder(req.query, optionsData);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Order retrieve successfully",
+    data: result,
+  });
+});
 
 export const orderController = {
   createOrder,
@@ -120,4 +130,5 @@ export const orderController = {
   pdfDownload,
   getDeliveryOrders,
   getAllOrdersForAdmin,
+  getAllReturnOrder,
 };

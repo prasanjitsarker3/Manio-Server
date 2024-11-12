@@ -478,6 +478,81 @@ const getAllOrderForAdmin = async (
     data: result,
   };
 };
+//Admin Data
+
+const getAllReturnOrder = async (params: any, options: IPaginationOptions) => {
+  const { page, limit, skip, sortBy, sortOrder } =
+    paginationCalculation(options);
+  const { searchTerm } = params;
+  const andCondition: Prisma.OrderWhereInput[] = [];
+  if (searchTerm) {
+    andCondition.push({
+      OR: orderSearchingField.map((field) => ({
+        [field]: {
+          contains: searchTerm,
+          mode: "insensitive",
+        },
+      })),
+    });
+  }
+
+  andCondition.push({
+    status: OrderStatus.RETURN,
+  });
+
+  const whereCondition: Prisma.OrderWhereInput =
+    andCondition.length > 0 ? { AND: andCondition } : {};
+
+  const result = await prisma.order.findMany({
+    where: whereCondition,
+    skip,
+    take: limit,
+    orderBy:
+      sortBy && sortOrder ? { [sortBy]: sortOrder } : { createdAt: "asc" },
+    select: {
+      id: true,
+      name: true,
+      address: true,
+      contact: true,
+      totalPrice: true,
+      deliveryCharge: true,
+      status: true,
+      createdAt: true,
+      orderItems: {
+        select: {
+          id: true,
+          quantity: true,
+          size: true,
+          product: {
+            select: {
+              name: true,
+              price: true,
+              photo: {
+                select: {
+                  id: true,
+                  img: true,
+                },
+                take: 1,
+              },
+            },
+          },
+        },
+      },
+    },
+  });
+  const total = await prisma.order.count({
+    where: whereCondition,
+  });
+
+  return {
+    meta: {
+      page,
+      limit,
+      total,
+    },
+    data: result,
+  };
+};
 
 export const orderService = {
   createNewOrderInToDB,
@@ -491,4 +566,5 @@ export const orderService = {
 
   //Admin Route
   getAllOrderForAdmin,
+  getAllReturnOrder,
 };

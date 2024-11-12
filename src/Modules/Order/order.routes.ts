@@ -25,6 +25,11 @@ router.get(
   orderController.getDeliveryOrders
 );
 router.get(
+  "/returnOrder",
+  auth(UserRole.admin, UserRole.user),
+  orderController.getAllReturnOrder
+);
+router.get(
   "/:productId",
   auth(UserRole.admin, UserRole.user),
   orderController.getSingleOrder

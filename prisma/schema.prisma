@@ -58,7 +58,9 @@ model Product {
   categoryId   String
   isDelete     Boolean @default(false)
   category     Category    @relation(fields: [categoryId], references: [id])
-
+  rating       Int @default(0)
+  description  String?
+  delivery     String?
   orderItems  OrderProduct[] 
   createdAt    DateTime    @default(now())
   updateAt     DateTime    @updatedAt

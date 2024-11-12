@@ -9,8 +9,18 @@ import { productSearchingField } from "./productInterface";
 
 const createdNewProduct = async (req: Request) => {
   const productData = JSON.parse(req.body.data);
-  const { name, price, discount, totalProduct, size, type, categoryId } =
-    productData;
+  const {
+    name,
+    price,
+    discount,
+    totalProduct,
+    size,
+    type,
+    categoryId,
+    rating,
+    description,
+    delivery,
+  } = productData;
   const formattedPrice = parseFloat(price);
   const formattedDiscount = discount ? parseFloat(discount) : 0;
   const formattedTotalProduct = parseInt(totalProduct, 10);
@@ -36,6 +46,9 @@ const createdNewProduct = async (req: Request) => {
       size: size.split(","),
       type,
       categoryId,
+      rating: rating,
+      description: description,
+      delivery: delivery,
       photo: {
         create: images.map((imgUrl) => ({
           img: imgUrl,
