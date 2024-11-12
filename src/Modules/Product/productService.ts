@@ -24,6 +24,7 @@ const createdNewProduct = async (req: Request) => {
   const formattedPrice = parseFloat(price);
   const formattedDiscount = discount ? parseFloat(discount) : 0;
   const formattedTotalProduct = parseInt(totalProduct, 10);
+  //Update Rating
   const ratingFormate = parseInt(rating, 10);
   const finalPrice =
     formattedPrice - (formattedPrice * formattedDiscount) / 100;
