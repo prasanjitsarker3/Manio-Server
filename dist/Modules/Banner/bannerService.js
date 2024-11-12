@@ -37,9 +37,10 @@ const createBanner = (req) => __awaiter(void 0, void 0, void 0, function* () {
     }
     const banner = JSON.parse(req.body.data);
     const bannerData = {
-        name: banner,
+        name: (banner === null || banner === void 0 ? void 0 : banner.name) || banner,
         img,
     };
+    console.log(bannerData);
     const result = yield Prisma_1.default.banner.create({
         //@ts-ignore
         data: bannerData,

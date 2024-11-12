@@ -36,13 +36,11 @@ const createdCategory = (req) => __awaiter(void 0, void 0, void 0, function* () 
         img = CloudImage === null || CloudImage === void 0 ? void 0 : CloudImage.secure_url;
     }
     const category = JSON.parse(req.body.data);
-    const categoryData = {
-        name: category,
-        img,
-    };
     const result = yield Prisma_1.default.category.create({
-        //@ts-ignore
-        data: categoryData,
+        data: {
+            name: (category === null || category === void 0 ? void 0 : category.name) || category,
+            img: img,
+        },
     });
     return result;
 });

@@ -31,7 +31,7 @@ const client_1 = require("@prisma/client");
 const productInterface_1 = require("./productInterface");
 const createdNewProduct = (req) => __awaiter(void 0, void 0, void 0, function* () {
     const productData = JSON.parse(req.body.data);
-    const { name, price, discount, totalProduct, size, type, categoryId } = productData;
+    const { name, price, discount, totalProduct, size, type, categoryId, rating, description, delivery, } = productData;
     const formattedPrice = parseFloat(price);
     const formattedDiscount = discount ? parseFloat(discount) : 0;
     const formattedTotalProduct = parseInt(totalProduct, 10);
@@ -51,6 +51,9 @@ const createdNewProduct = (req) => __awaiter(void 0, void 0, void 0, function* (
             size: size.split(","),
             type,
             categoryId,
+            rating: rating,
+            description: description,
+            delivery: delivery,
             photo: {
                 create: images.map((imgUrl) => ({
                     img: imgUrl,

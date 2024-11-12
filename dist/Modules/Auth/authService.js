@@ -22,7 +22,6 @@ const createToken_1 = require("../../App/Common/createToken");
 const config_1 = __importDefault(require("../../App/config"));
 const veriflyToken_1 = require("../../Utilities/veriflyToken");
 const userRegisterIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(payload);
     const hashPassword = yield bcrypt_1.default.hash(payload.password, 12);
     const userData = {
         name: payload.name,
@@ -59,7 +58,6 @@ const userLoginFromDB = (payload) => __awaiter(void 0, void 0, void 0, function*
         email: user.email,
         role: user.role,
     };
-    console.log(config_1.default.accessToken);
     const accessToken = (0, createToken_1.createToken)(jwtPayload, config_1.default.accessToken, config_1.default.accessTokenExpireDate);
     const refreshToken = (0, createToken_1.createToken)(jwtPayload, config_1.default.refreshToken, config_1.default.refreshTokenExpireDate);
     return {
@@ -95,7 +93,6 @@ const refreshToken = (token) => __awaiter(void 0, void 0, void 0, function* () {
     };
 });
 const changePassword = (user, payload) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log({ user, payload });
     const userData = yield Prisma_1.default.user.findUniqueOrThrow({
         where: {
             email: user.email,

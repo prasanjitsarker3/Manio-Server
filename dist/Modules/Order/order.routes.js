@@ -13,6 +13,7 @@ router.get("", (0, auth_1.default)(client_1.UserRole.admin, client_1.UserRole.us
 router.get("/adminOrder", (0, auth_1.default)(client_1.UserRole.admin, client_1.UserRole.user), orderController_1.orderController.getAllOrdersForAdmin);
 router.get("/confirmOrder", (0, auth_1.default)(client_1.UserRole.admin, client_1.UserRole.user), orderController_1.orderController.getConfirmOrders);
 router.get("/deliveryOrder", (0, auth_1.default)(client_1.UserRole.admin, client_1.UserRole.user), orderController_1.orderController.getDeliveryOrders);
+router.get("/returnOrder", (0, auth_1.default)(client_1.UserRole.admin, client_1.UserRole.user), orderController_1.orderController.getAllReturnOrder);
 router.get("/:productId", (0, auth_1.default)(client_1.UserRole.admin, client_1.UserRole.user), orderController_1.orderController.getSingleOrder);
 router.post("/create", orderController_1.orderController.createOrder);
 router.patch("/:orderId", (0, auth_1.default)(client_1.UserRole.admin, client_1.UserRole.user), orderController_1.orderController.updateOrderStatus);

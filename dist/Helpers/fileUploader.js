@@ -21,9 +21,6 @@ cloudinary_1.v2.config({
     cloud_name: "du1ibrigy",
     api_key: "993154364964536",
     api_secret: "MYSYgvEmmCZOS_WqMfsJc0mVK40",
-    // cloud_name: "dby9tcuil",
-    // api_key: "511759649588371",
-    // api_secret: "_OTTEH8U82ubXpom7nKw8ibPgcQ",
 });
 const storage = multer_1.default.diskStorage({
     destination: function (req, file, cb) {
@@ -35,7 +32,6 @@ const storage = multer_1.default.diskStorage({
 });
 const upload = (0, multer_1.default)({ storage: storage });
 const uploadToCloudinary = (file) => __awaiter(void 0, void 0, void 0, function* () {
-    //   console.log(file);
     return new Promise((resolve, reject) => {
         cloudinary_1.v2.uploader.upload(file.path, (error, result) => {
             fs_1.default.unlinkSync(file.path);
