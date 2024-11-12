@@ -35,6 +35,7 @@ const createdNewProduct = (req) => __awaiter(void 0, void 0, void 0, function* (
     const formattedPrice = parseFloat(price);
     const formattedDiscount = discount ? parseFloat(discount) : 0;
     const formattedTotalProduct = parseInt(totalProduct, 10);
+    const ratingFormate = parseInt(rating, 10);
     const finalPrice = formattedPrice - (formattedPrice * formattedDiscount) / 100;
     const files = req.files;
     let images = [];
@@ -51,7 +52,7 @@ const createdNewProduct = (req) => __awaiter(void 0, void 0, void 0, function* (
             size: size.split(","),
             type,
             categoryId,
-            rating: rating,
+            rating: ratingFormate,
             description: description,
             delivery: delivery,
             photo: {
