@@ -13,15 +13,14 @@ const createBanner = async (req: Request) => {
     const CloudImage = await fileUploader.uploadToCloudinary(files);
     img = CloudImage?.secure_url;
   }
-  const banner = JSON.parse(req.body.data);
-  const bannerData = {
-    name: banner?.name || banner,
-    img,
-  };
-  console.log(bannerData);
+  const { name, type } = JSON.parse(req.body.data);
   const result = await prisma.banner.create({
-    //@ts-ignore
-    data: bannerData,
+    data: {
+      name: name,
+      type: type,
+      //@ts-ignore
+      img: img,
+    },
   });
   return result;
 };

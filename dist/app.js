@@ -12,7 +12,12 @@ const cors_1 = __importDefault(require("cors"));
 const path_1 = __importDefault(require("path"));
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)({
-    origin: ["https://maniobd.com", "https://control.maniobd.com"],
+    origin: [
+        "https://maniobd.com",
+        "https://control.maniobd.com",
+        "http://localhost:3000",
+        "http://192.168.0.100:3000",
+    ],
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,

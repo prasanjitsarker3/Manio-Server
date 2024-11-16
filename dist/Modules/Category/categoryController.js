@@ -51,8 +51,19 @@ const deletedCategory = (0, catchAsync_1.default)((req, res) => __awaiter(void 0
         data: result,
     });
 }));
+const categoryToggle = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { toggleId } = req.params;
+    const result = yield categoryService_1.categoryService.categoryFeatureToggle(toggleId);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "Category Toggle Successfully",
+        data: result,
+    });
+}));
 exports.categoryController = {
     createdCategory,
     allCategory,
     deletedCategory,
+    categoryToggle,
 };

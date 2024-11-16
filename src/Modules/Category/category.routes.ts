@@ -12,5 +12,10 @@ router.post(
 );
 router.get("", categoryController.allCategory);
 router.patch("/:id", auth(UserRole.admin), categoryController.deletedCategory);
+router.patch(
+  "/update/:toggleId",
+  auth(UserRole.admin),
+  categoryController.categoryToggle
+);
 
 export const categoryRoutes = router;

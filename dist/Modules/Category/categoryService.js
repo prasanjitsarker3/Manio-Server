@@ -96,8 +96,28 @@ const categoryDeletedFromDB = (id) => __awaiter(void 0, void 0, void 0, function
     });
     return result;
 });
+const categoryFeatureToggle = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const category = yield Prisma_1.default.category.findUnique({
+        where: {
+            id: id,
+        },
+        select: {
+            isFeature: true,
+        },
+    });
+    const result = yield Prisma_1.default.category.update({
+        where: {
+            id: id,
+        },
+        data: {
+            isFeature: !(category === null || category === void 0 ? void 0 : category.isFeature),
+        },
+    });
+    return result;
+});
 exports.categoryService = {
     createdCategory,
     getAllCategoryFormDB,
     categoryDeletedFromDB,
+    categoryFeatureToggle,
 };

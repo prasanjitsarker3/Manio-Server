@@ -1,8 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init2
 
 generator client {
   provider = "prisma-client-js"
@@ -29,6 +24,7 @@ model Banner {
   id String @id @default(uuid())
   name String ?
   img String
+  type  BannerType @default(banner)
   createdAt DateTime @default(now())
   updateAt DateTime @updatedAt
   @@map("banners")
@@ -38,8 +34,8 @@ model Category {
   name String @unique
   img String
   isDeleted Boolean @default(false)
+  isFeature Boolean @default(false)
   products  Product[] 
- 
   createdAt DateTime @default(now())
   updateAt DateTime @updatedAt
   @@map("categories")
@@ -133,5 +129,10 @@ enum UserRole {
 enum Gender {
   Man
   Woman
+}
+
+enum BannerType {
+  banner
+  add
 }
 

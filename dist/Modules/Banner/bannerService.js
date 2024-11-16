@@ -35,15 +35,14 @@ const createBanner = (req) => __awaiter(void 0, void 0, void 0, function* () {
         const CloudImage = yield fileUploader_1.fileUploader.uploadToCloudinary(files);
         img = CloudImage === null || CloudImage === void 0 ? void 0 : CloudImage.secure_url;
     }
-    const banner = JSON.parse(req.body.data);
-    const bannerData = {
-        name: (banner === null || banner === void 0 ? void 0 : banner.name) || banner,
-        img,
-    };
-    console.log(bannerData);
+    const { name, type } = JSON.parse(req.body.data);
     const result = yield Prisma_1.default.banner.create({
-        //@ts-ignore
-        data: bannerData,
+        data: {
+            name: name,
+            type: type,
+            //@ts-ignore
+            img: img,
+        },
     });
     return result;
 });

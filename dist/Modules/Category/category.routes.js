@@ -13,4 +13,5 @@ const router = express_1.default.Router();
 router.post("/created", (0, auth_1.default)(client_1.UserRole.admin), fileUploader_1.fileUploader.upload.single("file"), categoryController_1.categoryController.createdCategory);
 router.get("", categoryController_1.categoryController.allCategory);
 router.patch("/:id", (0, auth_1.default)(client_1.UserRole.admin), categoryController_1.categoryController.deletedCategory);
+router.patch("/update/:toggleId", (0, auth_1.default)(client_1.UserRole.admin), categoryController_1.categoryController.categoryToggle);
 exports.categoryRoutes = router;

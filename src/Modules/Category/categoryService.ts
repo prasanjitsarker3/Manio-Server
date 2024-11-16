@@ -87,8 +87,31 @@ const categoryDeletedFromDB = async (id: string) => {
   return result;
 };
 
+const categoryFeatureToggle = async (id: string) => {
+  const category = await prisma.category.findUnique({
+    where: {
+      id: id,
+    },
+    select: {
+      isFeature: true,
+    },
+  });
+
+  const result = await prisma.category.update({
+    where: {
+      id: id,
+    },
+    data: {
+      isFeature: !category?.isFeature,
+    },
+  });
+
+  return result;
+};
+
 export const categoryService = {
   createdCategory,
   getAllCategoryFormDB,
   categoryDeletedFromDB,
+  categoryFeatureToggle,
 };
