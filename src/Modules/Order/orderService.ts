@@ -21,7 +21,6 @@ const createNewOrderInToDB = async (payload: any) => {
         create: payload.productOrderData.map((item: any) => {
           return {
             quantity: item.quantity,
-            // size: item.size.split(","),
             size: Array.isArray(item.size) ? item.size : [],
             product: {
               connect: { id: item.productId },
@@ -73,6 +72,7 @@ const getAllOrderFromDB = async (params: any, options: IPaginationOptions) => {
       contact: true,
       totalPrice: true,
       deliveryCharge: true,
+      discountNow: true,
       status: true,
       isPdf: true,
       createdAt: true,
@@ -85,6 +85,7 @@ const getAllOrderFromDB = async (params: any, options: IPaginationOptions) => {
             select: {
               name: true,
               price: true,
+              discount: true,
               photo: {
                 select: {
                   id: true,
@@ -152,6 +153,7 @@ const getConfirmOrderFromDB = async (
       contact: true,
       totalPrice: true,
       deliveryCharge: true,
+      discountNow: true,
       status: true,
       createdAt: true,
       updateAt: true,
@@ -231,6 +233,7 @@ const getDeliveryOrderFromDB = async (
       contact: true,
       totalPrice: true,
       deliveryCharge: true,
+      discountNow: true,
       status: true,
       createdAt: true,
       updateAt: true,
@@ -282,6 +285,7 @@ const getSingleOrder = async (id: string) => {
       contact: true,
       totalPrice: true,
       deliveryCharge: true,
+      discountNow: true,
       status: true,
       isPdf: true,
       createdAt: true,
@@ -441,6 +445,7 @@ const getAllOrderForAdmin = async (
       contact: true,
       totalPrice: true,
       deliveryCharge: true,
+      discountNow: true,
       status: true,
       createdAt: true,
       orderItems: {
@@ -516,6 +521,7 @@ const getAllReturnOrder = async (params: any, options: IPaginationOptions) => {
       contact: true,
       totalPrice: true,
       deliveryCharge: true,
+      discountNow: true,
       status: true,
       createdAt: true,
       orderItems: {
@@ -554,6 +560,56 @@ const getAllReturnOrder = async (params: any, options: IPaginationOptions) => {
   };
 };
 
+const updateDeliveryAndDiscount = async (data: {
+  id: string;
+  delivery?: string;
+  discount?: string;
+}) => {
+  const { id, delivery, discount } = data;
+
+  const orderData = await prisma.order.findUniqueOrThrow({
+    where: {
+      id: id,
+    },
+  });
+
+  const currentDeliveryCharge = orderData.deliveryCharge ?? 0;
+  const currentDiscountNow = orderData.discountNow ?? 0;
+
+  let newDeliveryCharge = currentDeliveryCharge;
+  let discountPrice = currentDiscountNow;
+  let calculationTotalPrice = orderData.totalPrice;
+
+  if (delivery || discount) {
+    if (delivery) {
+      newDeliveryCharge = parseFloat(delivery);
+    }
+    const previousTotalPrice =
+      orderData.totalPrice - currentDeliveryCharge + currentDiscountNow;
+    const newTotalPrice = previousTotalPrice + newDeliveryCharge;
+    if (discount) {
+      const discountPercentage = parseFloat(discount) / 100;
+      discountPrice = parseFloat(
+        (newTotalPrice * discountPercentage).toFixed(2)
+      );
+    }
+    calculationTotalPrice = newTotalPrice - discountPrice;
+  }
+
+  const updatedOrder = await prisma.order.update({
+    where: {
+      id: orderData.id,
+    },
+    data: {
+      deliveryCharge: newDeliveryCharge,
+      discountNow: discountPrice,
+      totalPrice: calculationTotalPrice,
+    },
+  });
+
+  return updatedOrder;
+};
+
 export const orderService = {
   createNewOrderInToDB,
   getAllOrderFromDB,
@@ -563,6 +619,7 @@ export const orderService = {
   deleteOrderFromDB,
   isPDFDownloadFromDB,
   getDeliveryOrderFromDB,
+  updateDeliveryAndDiscount,
 
   //Admin Route
   getAllOrderForAdmin,

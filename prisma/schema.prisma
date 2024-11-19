@@ -83,6 +83,7 @@ model Order {
   note           String?
   deliveryCharge Float?        
   totalPrice     Float
+  discountNow          Int @default(0)
   isDeleted      Boolean        @default(false)
   isPdf          Boolean        @default(false)
   status         OrderStatus    @default(PENDING)

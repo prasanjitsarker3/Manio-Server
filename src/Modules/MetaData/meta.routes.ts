@@ -15,5 +15,6 @@ router.get(
   auth(UserRole.admin, UserRole.user),
   metaController.moderatorDashboardData
 );
+router.get("/monthlyMetaData", metaController.getDashboardMonthlyData);
 
 export const metaDataRoutes = router;

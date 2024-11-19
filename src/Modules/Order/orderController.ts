@@ -119,6 +119,15 @@ const getAllReturnOrder = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+const getDeliveryAndPrice = catchAsync(async (req: Request, res: Response) => {
+  const result = await orderService.updateDeliveryAndDiscount(req.body);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Order retrieve successfully",
+    data: result,
+  });
+});
 
 export const orderController = {
   createOrder,
@@ -131,4 +140,5 @@ export const orderController = {
   getDeliveryOrders,
   getAllOrdersForAdmin,
   getAllReturnOrder,
+  getDeliveryAndPrice,
 };

@@ -35,6 +35,12 @@ router.get(
   orderController.getSingleOrder
 );
 router.post("/create", orderController.createOrder);
+
+router.patch(
+  "/updateDiscount",
+  auth(UserRole.user, UserRole.admin),
+  orderController.getDeliveryAndPrice
+);
 router.patch(
   "/:orderId",
   auth(UserRole.admin, UserRole.user),

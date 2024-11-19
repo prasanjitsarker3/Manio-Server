@@ -295,7 +295,96 @@ const moderatorDashboardData = async () => {
   };
 };
 
+const getMonthlyDataDownload = async (args: { selectedMonth: string }) => {
+  const { selectedMonth } = args;
+  const [monthName, year] = selectedMonth.split(" ");
+  const monthIndex = new Date(Date.parse(`${monthName} 1, ${year}`)).getMonth();
+  const startDate = new Date(Number(year), monthIndex, 1);
+  const endDate = new Date(Number(year), monthIndex + 1, 0, 23, 59, 59, 999);
+
+  const productCount = await prisma.product.count({
+    where: {
+      createdAt: {
+        gte: startDate,
+        lte: endDate,
+      },
+    },
+  });
+  const orderCount = await prisma.order.count({
+    where: {
+      createdAt: {
+        gte: startDate,
+        lte: endDate,
+      },
+    },
+  });
+  const confirmOrder = await prisma.order.count({
+    where: {
+      createdAt: {
+        gte: startDate,
+        lte: endDate,
+      },
+      status: OrderStatus.CONFIFM,
+    },
+  });
+  const deliveryOrder = await prisma.order.count({
+    where: {
+      createdAt: {
+        gte: startDate,
+        lte: endDate,
+      },
+      status: OrderStatus.DELIVERY,
+    },
+  });
+  const cancelOrder = await prisma.order.count({
+    where: {
+      createdAt: {
+        gte: startDate,
+        lte: endDate,
+      },
+      status: OrderStatus.REJECTED,
+    },
+  });
+
+  const returnOrder = await prisma.order.count({
+    where: {
+      createdAt: {
+        gte: startDate,
+        lte: endDate,
+      },
+      status: OrderStatus.RETURN,
+    },
+  });
+
+  const totalProductSell = await prisma.order.aggregate({
+    where: {
+      createdAt: {
+        gte: startDate,
+        lte: endDate,
+      },
+      status: {
+        in: [OrderStatus.CONFIFM, OrderStatus.DELIVERY],
+      },
+    },
+    _sum: {
+      totalPrice: true,
+    },
+  });
+  const totalSales = totalProductSell._sum.totalPrice || 0;
+
+  return {
+    totalProduct: productCount,
+    totalOrder: orderCount,
+    totalConfirmOrder: confirmOrder,
+    totalDeliveryOrder: deliveryOrder,
+    totalCancelOrder: cancelOrder,
+    totalReturnOrder: returnOrder,
+    totalProductSellAmount: totalSales,
+  };
+};
+
 export const metaService = {
   adminDashboardMetaData,
   moderatorDashboardData,
+  getMonthlyDataDownload,
 };
