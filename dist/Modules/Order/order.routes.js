@@ -16,6 +16,7 @@ router.get("/deliveryOrder", (0, auth_1.default)(client_1.UserRole.admin, client
 router.get("/returnOrder", (0, auth_1.default)(client_1.UserRole.admin, client_1.UserRole.user), orderController_1.orderController.getAllReturnOrder);
 router.get("/:productId", (0, auth_1.default)(client_1.UserRole.admin, client_1.UserRole.user), orderController_1.orderController.getSingleOrder);
 router.post("/create", orderController_1.orderController.createOrder);
+router.patch("/updateDiscount", (0, auth_1.default)(client_1.UserRole.user, client_1.UserRole.admin), orderController_1.orderController.getDeliveryAndPrice);
 router.patch("/:orderId", (0, auth_1.default)(client_1.UserRole.admin, client_1.UserRole.user), orderController_1.orderController.updateOrderStatus);
 router.patch("/pdf/:pdfId", (0, auth_1.default)(client_1.UserRole.admin, client_1.UserRole.user), orderController_1.orderController.pdfDownload);
 router.delete("/:orderProductId", (0, auth_1.default)(client_1.UserRole.admin, client_1.UserRole.user), orderController_1.orderController.deleteOrder);

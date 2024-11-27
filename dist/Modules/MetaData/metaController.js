@@ -17,6 +17,7 @@ const catchAsync_1 = __importDefault(require("../../Utilities/catchAsync"));
 const metaService_1 = require("./metaService");
 const sendResponse_1 = __importDefault(require("../../Utilities/sendResponse"));
 const http_status_1 = __importDefault(require("http-status"));
+const ApiError_1 = __importDefault(require("../../App/Error/ApiError"));
 const adminDashboardMetaData = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield metaService_1.metaService.adminDashboardMetaData();
     (0, sendResponse_1.default)(res, {
@@ -35,7 +36,21 @@ const moderatorDashboardData = (0, catchAsync_1.default)((req, res) => __awaiter
         data: result,
     });
 }));
+const getDashboardMonthlyData = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { selectedMonth } = req.query;
+    if (!selectedMonth || typeof selectedMonth !== "string") {
+        throw new ApiError_1.default(http_status_1.default.BAD_REQUEST, "Invalid or missing 'selectedMonth' parameter");
+    }
+    const result = yield metaService_1.metaService.getMonthlyDataDownload({ selectedMonth });
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "MetaData Retrieved Successfully",
+        data: result,
+    });
+}));
 exports.metaController = {
     adminDashboardMetaData,
     moderatorDashboardData,
+    getDashboardMonthlyData,
 };

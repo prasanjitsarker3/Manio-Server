@@ -73,7 +73,7 @@ const adminDashboardMetaData = () => __awaiter(void 0, void 0, void 0, function*
         const totalOrderCount = orders.length; // Total orders for the day
         const totalAmount = orders.reduce((acc, order) => acc + order.totalPrice, 0); // Sum of total prices
         lastSevenDaysData.push({
-            date: (0, date_fns_1.format)(date, "dd-MM-yyyy"), // Format date as "25-10-2024"
+            date: (0, date_fns_1.format)(date, "dd-MM-yyyy"),
             totalOrder: totalOrderCount,
             totalAmount: totalAmount,
         });
@@ -251,7 +251,91 @@ const moderatorDashboardData = () => __awaiter(void 0, void 0, void 0, function*
         todayCancelOrder,
     };
 });
+const getMonthlyDataDownload = (args) => __awaiter(void 0, void 0, void 0, function* () {
+    const { selectedMonth } = args;
+    const [monthName, year] = selectedMonth.split(" ");
+    const monthIndex = new Date(Date.parse(`${monthName} 1, ${year}`)).getMonth();
+    const startDate = new Date(Number(year), monthIndex, 1);
+    const endDate = new Date(Number(year), monthIndex + 1, 0, 23, 59, 59, 999);
+    const productCount = yield Prisma_1.default.product.count({
+        where: {
+            createdAt: {
+                gte: startDate,
+                lte: endDate,
+            },
+        },
+    });
+    const orderCount = yield Prisma_1.default.order.count({
+        where: {
+            createdAt: {
+                gte: startDate,
+                lte: endDate,
+            },
+        },
+    });
+    const confirmOrder = yield Prisma_1.default.order.count({
+        where: {
+            createdAt: {
+                gte: startDate,
+                lte: endDate,
+            },
+            status: client_1.OrderStatus.CONFIFM,
+        },
+    });
+    const deliveryOrder = yield Prisma_1.default.order.count({
+        where: {
+            createdAt: {
+                gte: startDate,
+                lte: endDate,
+            },
+            status: client_1.OrderStatus.DELIVERY,
+        },
+    });
+    const cancelOrder = yield Prisma_1.default.order.count({
+        where: {
+            createdAt: {
+                gte: startDate,
+                lte: endDate,
+            },
+            status: client_1.OrderStatus.REJECTED,
+        },
+    });
+    const returnOrder = yield Prisma_1.default.order.count({
+        where: {
+            createdAt: {
+                gte: startDate,
+                lte: endDate,
+            },
+            status: client_1.OrderStatus.RETURN,
+        },
+    });
+    const totalProductSell = yield Prisma_1.default.order.aggregate({
+        where: {
+            createdAt: {
+                gte: startDate,
+                lte: endDate,
+            },
+            status: {
+                in: [client_1.OrderStatus.CONFIFM, client_1.OrderStatus.DELIVERY],
+            },
+        },
+        _sum: {
+            totalPrice: true,
+        },
+    });
+    const totalSales = totalProductSell._sum.totalPrice || 0;
+    return {
+        totalProduct: productCount,
+        totalOrder: orderCount,
+        totalConfirmOrder: confirmOrder,
+        totalDeliveryOrder: deliveryOrder,
+        totalCancelOrder: cancelOrder,
+        totalReturnOrder: returnOrder,
+        totalProductSellAmount: totalSales,
+    };
+});
 exports.metaService = {
     adminDashboardMetaData,
     moderatorDashboardData,
+    getMonthlyDataDownload,
 };

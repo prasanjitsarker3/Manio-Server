@@ -9,12 +9,7 @@ import path from "path";
 const app: Application = express();
 app.use(
   cors({
-    origin: [
-      "https://maniobd.com",
-      "https://control.maniobd.com",
-      "http://localhost:3000",
-      "http://192.168.0.100:3000",
-    ],
+    origin: ["https://maniobd.com", "https://control.maniobd.com"],
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,

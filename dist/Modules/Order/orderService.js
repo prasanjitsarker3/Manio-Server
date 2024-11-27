@@ -42,7 +42,6 @@ const createNewOrderInToDB = (payload) => __awaiter(void 0, void 0, void 0, func
                 create: payload.productOrderData.map((item) => {
                     return {
                         quantity: item.quantity,
-                        // size: item.size.split(","),
                         size: Array.isArray(item.size) ? item.size : [],
                         product: {
                             connect: { id: item.productId },
@@ -87,6 +86,7 @@ const getAllOrderFromDB = (params, options) => __awaiter(void 0, void 0, void 0,
             contact: true,
             totalPrice: true,
             deliveryCharge: true,
+            discountNow: true,
             status: true,
             isPdf: true,
             createdAt: true,
@@ -99,6 +99,7 @@ const getAllOrderFromDB = (params, options) => __awaiter(void 0, void 0, void 0,
                         select: {
                             name: true,
                             price: true,
+                            discount: true,
                             photo: {
                                 select: {
                                     id: true,
@@ -154,6 +155,7 @@ const getConfirmOrderFromDB = (params, options) => __awaiter(void 0, void 0, voi
             contact: true,
             totalPrice: true,
             deliveryCharge: true,
+            discountNow: true,
             status: true,
             createdAt: true,
             updateAt: true,
@@ -221,6 +223,7 @@ const getDeliveryOrderFromDB = (params, options) => __awaiter(void 0, void 0, vo
             contact: true,
             totalPrice: true,
             deliveryCharge: true,
+            discountNow: true,
             status: true,
             createdAt: true,
             updateAt: true,
@@ -270,6 +273,7 @@ const getSingleOrder = (id) => __awaiter(void 0, void 0, void 0, function* () {
             contact: true,
             totalPrice: true,
             deliveryCharge: true,
+            discountNow: true,
             status: true,
             isPdf: true,
             createdAt: true,
@@ -411,6 +415,7 @@ const getAllOrderForAdmin = (params, options) => __awaiter(void 0, void 0, void 
             contact: true,
             totalPrice: true,
             deliveryCharge: true,
+            discountNow: true,
             status: true,
             createdAt: true,
             orderItems: {
@@ -478,6 +483,7 @@ const getAllReturnOrder = (params, options) => __awaiter(void 0, void 0, void 0,
             contact: true,
             totalPrice: true,
             deliveryCharge: true,
+            discountNow: true,
             status: true,
             createdAt: true,
             orderItems: {
@@ -514,6 +520,43 @@ const getAllReturnOrder = (params, options) => __awaiter(void 0, void 0, void 0,
         data: result,
     };
 });
+const updateDeliveryAndDiscount = (data) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b;
+    const { id, delivery, discount } = data;
+    const orderData = yield Prisma_1.default.order.findUniqueOrThrow({
+        where: {
+            id: id,
+        },
+    });
+    const currentDeliveryCharge = (_a = orderData.deliveryCharge) !== null && _a !== void 0 ? _a : 0;
+    const currentDiscountNow = (_b = orderData.discountNow) !== null && _b !== void 0 ? _b : 0;
+    let newDeliveryCharge = currentDeliveryCharge;
+    let discountPrice = currentDiscountNow;
+    let calculationTotalPrice = orderData.totalPrice;
+    if (delivery || discount) {
+        if (delivery) {
+            newDeliveryCharge = parseFloat(delivery);
+        }
+        const previousTotalPrice = orderData.totalPrice - currentDeliveryCharge + currentDiscountNow;
+        const newTotalPrice = previousTotalPrice + newDeliveryCharge;
+        if (discount) {
+            const discountPercentage = parseFloat(discount) / 100;
+            discountPrice = parseFloat((newTotalPrice * discountPercentage).toFixed(2));
+        }
+        calculationTotalPrice = newTotalPrice - discountPrice;
+    }
+    const updatedOrder = yield Prisma_1.default.order.update({
+        where: {
+            id: orderData.id,
+        },
+        data: {
+            deliveryCharge: newDeliveryCharge,
+            discountNow: discountPrice,
+            totalPrice: calculationTotalPrice,
+        },
+    });
+    return updatedOrder;
+});
 exports.orderService = {
     createNewOrderInToDB,
     getAllOrderFromDB,
@@ -523,6 +566,7 @@ exports.orderService = {
     deleteOrderFromDB,
     isPDFDownloadFromDB,
     getDeliveryOrderFromDB,
+    updateDeliveryAndDiscount,
     //Admin Route
     getAllOrderForAdmin,
     getAllReturnOrder,
