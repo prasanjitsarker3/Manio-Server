@@ -1,3 +1,4 @@
+
 # Step 1: Build Stage (using a larger image with all dependencies)
 FROM node:16 AS build
 
@@ -12,8 +13,11 @@ RUN npm install
 # Copy the rest of the application code
 COPY . .
 COPY .env .env
+# Generate Prisma client
 RUN npx prisma generate
 
+# Run Prisma migrations during the build stage
+RUN npx prisma migrate dev
 # Build the TypeScript code (if applicable)
 RUN npm run build
 # Step 2: Production Stage (using a smaller image for running)
