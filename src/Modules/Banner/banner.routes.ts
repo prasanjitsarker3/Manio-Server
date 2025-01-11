@@ -14,6 +14,7 @@ router.post(
 );
 
 router.get("", bannerController.getAllBanner);
+router.get("/new", bannerController.newBanner);
 router.delete(
   "/:deleteId",
   auth(UserRole.admin),

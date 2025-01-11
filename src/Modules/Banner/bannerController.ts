@@ -40,9 +40,19 @@ const deleteBanner = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+const newBanner = catchAsync(async (req: Request, res: Response) => {
+  const result = await bannerService.getNewBanner();
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "New Banner Successfully",
+    data: result,
+  });
+});
 
 export const bannerController = {
   createBanner,
   getAllBanner,
   deleteBanner,
+  newBanner,
 };

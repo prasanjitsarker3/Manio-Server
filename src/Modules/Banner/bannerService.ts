@@ -3,7 +3,7 @@ import { fileUploader } from "../../Helpers/fileUploader";
 import prisma from "../../App/Common/Prisma";
 import { IPaginationOptions } from "../User/userInterface";
 import paginationCalculation from "../../Utilities/paginationCalculation";
-import { Prisma } from "@prisma/client";
+import { BannerType, Prisma } from "@prisma/client";
 import { categorySearchingField } from "../Category/categoryInterface";
 
 const createBanner = async (req: Request) => {
@@ -79,8 +79,18 @@ const bannerDelete = async (id: string) => {
   return result;
 };
 
+const getNewBanner = async () => {
+  const result = await prisma.banner.findMany({
+    where: {
+      type: BannerType.add,
+    },
+  });
+  return result;
+};
+
 export const bannerService = {
   createBanner,
   getAllBanner,
   bannerDelete,
+  getNewBanner,
 };
