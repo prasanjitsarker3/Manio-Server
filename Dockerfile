@@ -28,6 +28,7 @@ COPY --from=build /app/package*.json ./
 #COPY --from=build /app/dist ./dist  # Assuming your built files are in the dist directory
 COPY --from=build /app/dist /app/dist
 COPY --from=build /app/node_modules/.prisma /app/node_modules/.prisma
+COPY --from=build /app/src ./src
 # Install only production dependencies (skip dev dependencies)
 RUN npm install --production
 ENV PORT=5000
