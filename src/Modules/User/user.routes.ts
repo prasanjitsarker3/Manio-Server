@@ -5,6 +5,7 @@ import { UserRole } from "@prisma/client";
 const router = express.Router();
 
 router.get("", userController.getAllUser);
+//Check in here
 router.get("/check", userController.checkAllUser);
 router.get(
   "/me",
