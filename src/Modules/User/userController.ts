@@ -51,9 +51,20 @@ const deleteUser = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const checkAllUser = catchAsync(async (req: Request, res: Response) => {
+  const result = await userServices.getAUser();
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Check Successfully",
+    data: result,
+  });
+});
+
 export const userController = {
   getAllUser,
   myProfile,
   profileUpdate,
   deleteUser,
+  checkAllUser,
 };

@@ -6,6 +6,15 @@ import bcrypt from "bcrypt";
 import paginationCalculation from "../../Utilities/paginationCalculation";
 import { ITokenUser } from "../../App/Common/authType";
 
+const getAUser = async () => {
+  const result = await prisma.user.findMany({
+    where: {
+      status: UserStatus.ACTIVE,
+    },
+  });
+
+  return result;
+};
 const getAllUserFromDB = async (params: any, options: IPaginationOptions) => {
   const { page, limit, skip, sortBy, sortOrder } =
     paginationCalculation(options);
@@ -129,4 +138,5 @@ export const userServices = {
   myProfileFromDB,
   profileUpdateFromDB,
   deletedUser,
+  getAUser,
 };
