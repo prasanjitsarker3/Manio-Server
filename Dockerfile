@@ -36,6 +36,7 @@ COPY --from=build /app/package*.json ./
 #COPY --from=build /app/dist ./dist  # Assuming your built files are in the dist directory
 COPY --from=build /app/dist /app/dist
 COPY --from=build /app/node_modules/.prisma /app/node_modules/.prisma
+COPY --from=build /app/src ./src
 
 # Ensure uploads directory exists
 RUN mkdir -p /app/uploads && chmod 755 /app/uploads
@@ -49,3 +50,5 @@ EXPOSE 5000
 
 # Start the application
 CMD ["npm", "start"]
+
+
